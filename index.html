@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff8f8">
+<title>A Little Something for You</title>
+<style>
+:root{--rose:#d98fa6;--ink:#55434a}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;overflow-x:hidden;color:var(--ink);background:linear-gradient(180deg,#fffafa,#fff1f5);font-family:Georgia,"Times New Roman",serif}
+.petals{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.petal{position:absolute;top:-12vh;width:10px;height:15px;background:#efb5c6;border-radius:90% 10% 90% 10%;opacity:.72;animation:fall linear infinite}
+@keyframes fall{0%{transform:translate3d(0,-10vh,0) rotate(0)}100%{transform:translate3d(65px,115vh,0) rotate(540deg)}}
+main{position:relative;z-index:2;width:min(92%,560px);min-height:100vh;margin:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:42px 18px}
+.eyebrow{font:12px/1.4 Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#b77b8e}
+h1{font-size:clamp(32px,8vw,46px);font-weight:normal;margin:14px 0 12px}
+.intro{font-size:18px;line-height:1.65;margin:0 0 30px;color:#806b72}
+button{border:1px solid #dca4b4;color:#fff;background:#c9879d;border-radius:999px;padding:15px 27px;font-size:16px;letter-spacing:.02em;box-shadow:0 7px 20px #d99bad35;cursor:pointer;font-family:Arial,sans-serif}
+#surprise{display:none;width:100%;animation:appear .9s ease both}#surprise.show{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tree{width:min(100%,340px);height:auto;margin:8px auto;display:block}
+.message{max-width:440px;margin:8px auto 20px;padding:22px 20px;background:#ffffffc9;border:1px solid #f0d6de;border-radius:18px;font-size:20px;line-height:1.7;box-shadow:0 8px 28px #b77b8e12}
+.music-label{font:12px/1.5 Arial,sans-serif;color:#987681;margin:12px 0 7px}
+.player-wrap{width:160px;height:90px;margin:0 auto;overflow:hidden;border-radius:10px;box-shadow:0 5px 18px #79546222;background:#f5e5e9}
+#player{width:160px;height:90px}.music-note{font:11px/1.5 Arial,sans-serif;color:#9b858c;max-width:300px;margin:8px auto 0}.footer{margin-top:25px;color:#bd91a0;font-size:13px}
+</style>
+</head>
+<body>
+<div class="petals" aria-hidden="true" id="petals"></div>
+<main>
+<section id="opening">
+<div class="eyebrow">A small moment, just for you</div>
+<h1>A Little Something for You</h1>
+<p class="intro">Some things are worth taking a moment for...</p>
+<button id="openButton" type="button">Open Your Surprise ♡</button>
+</section>
+<section id="surprise" aria-live="polite">
+<div class="eyebrow">A little surprise</div>
+<svg class="tree" viewBox="0 0 340 230" role="img" aria-label="A delicate cherry blossom tree">
+<path d="M170 220 C165 183 177 157 164 130 C151 104 128 95 112 73 M167 145 C188 119 203 101 216 75 M163 171 C137 151 115 145 91 129 M178 157 C207 143 229 133 252 111" fill="none" stroke="#876d65" stroke-width="9" stroke-linecap="round"/>
+<path d="M170 219 C176 183 166 157 178 130" fill="none" stroke="#876d65" stroke-width="5" stroke-linecap="round"/>
+<g fill="#efb7c8"><circle cx="87" cy="74" r="24"/><circle cx="119" cy="53" r="27"/><circle cx="151" cy="65" r="25"/><circle cx="190" cy="49" r="29"/><circle cx="224" cy="62" r="27"/><circle cx="253" cy="91" r="24"/><circle cx="104" cy="112" r="25"/><circle cx="145" cy="105" r="27"/><circle cx="199" cy="99" r="28"/><circle cx="238" cy="122" r="23"/><circle cx="72" cy="111" r="18"/></g>
+<g fill="#fff1f5"><circle cx="87" cy="74" r="7"/><circle cx="119" cy="53" r="7"/><circle cx="151" cy="65" r="7"/><circle cx="190" cy="49" r="7"/><circle cx="224" cy="62" r="7"/><circle cx="253" cy="91" r="7"/><circle cx="104" cy="112" r="7"/><circle cx="145" cy="105" r="7"/><circle cx="199" cy="99" r="7"/><circle cx="238" cy="122" r="7"/></g>
+<g fill="#d98fa6"><circle cx="119" cy="53" r="3"/><circle cx="190" cy="49" r="3"/><circle cx="145" cy="105" r="3"/><circle cx="224" cy="62" r="3"/></g>
+</svg>
+<p class="message">There was never a dull moment of suspense and joy you had whenever you opened a blind box especially one that could hang on your bags. I hope you get the one you want!</p>
+<div class="music-label">A song to go with your surprise ♡</div>
+<div class="player-wrap"><div id="player"></div></div>
+<p class="music-note">The song is set to start when you open the surprise. If your iPhone blocks playback, tap Play here.</p>
+<div class="footer">♡</div>
+</section>
+</main>
+<script>
+const petals=document.getElementById('petals');
+for(let i=0;i<18;i++){const p=document.createElement('span');p.className='petal';p.style.left=(Math.random()*100)+'%';p.style.animationDuration=(12+Math.random()*13)+'s';p.style.animationDelay=(-Math.random()*22)+'s';p.style.opacity=(.35+Math.random()*.45).toFixed(2);petals.appendChild(p)}
+let player=null,playerReady=false,openingTapped=false;
+const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag);
+window.onYouTubeIframeAPIReady=function(){player=new YT.Player('player',{width:'160',height:'90',videoId:'PXHS35FNOxU',playerVars:{playsinline:1,controls:1,rel:0},events:{onReady:function(){playerReady=true;if(openingTapped){try{player.playVideo()}catch(e){}}}}})};
+document.getElementById('openButton').addEventListener('click',function(){
+openingTapped=true;
+if(playerReady&&player){try{player.playVideo()}catch(e){}}
+document.getElementById('opening').style.display='none';
+document.getElementById('surprise').classList.add('show');
+window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+</body>
+</html>
